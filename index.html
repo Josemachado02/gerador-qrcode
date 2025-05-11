@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>QR Code com Imagem</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+  <div class="panel">
+    <h2>Gerador de QR Code</h2>
+
+    <label for="texto">Link desejado:</label>
+    <input type="text" id="texto" placeholder="Digite algo..." />
+
+    <label for="imageUpload">Selecione a imagem:</label>
+    <input type="file" id="imageUpload" accept="image/*" />
+
+    <button onclick="gerarQRCode()">Gerar</button>
+    <button id="btnDownload" onclick="baixarQRCode()" disabled>Baixar QR Code</button>
+
+
+    <div id="qrcode-container">
+      <div id="qrcode"></div>
+      <img id="logo" src="" alt="Logo">
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
