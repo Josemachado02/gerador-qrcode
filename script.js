@@ -35,36 +35,52 @@ function gerarQRCode() {
     }
   }
 
-  function baixarQRCode() {
-    const qrCanvas = document.querySelector("#qrcode canvas");
-    const logo = document.getElementById("logo");
-  
-    if (!qrCanvas) return;
-  
-    const canvas = document.createElement("canvas");
-    const ctx = canvas.getContext("2d");
-  
-    canvas.width = qrCanvas.width;
-    canvas.height = qrCanvas.height;
-  
-    ctx.drawImage(qrCanvas, 0, 0);
-  
-    if (logo && logo.src && logo.style.display !== "none") {
-      const logoSize = 80;
-      const borderSize = 5;
-      const totalSize = logoSize + borderSize * 2;
-      const x = (canvas.width - totalSize) / 2;
-      const y = (canvas.height - totalSize) / 2;
-  
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(x, y, totalSize, totalSize);
-  
-      ctx.drawImage(logo, x + borderSize, y + borderSize, logoSize, logoSize);
-    }
-  
+function baixarQRCode() {
+  const qrCanvas = document.querySelector("#qrcode canvas");
+  const logo = document.getElementById("logo");
+
+  if (!qrCanvas) return;
+
+  const scale = 3;
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = qrCanvas.width * scale;
+  canvas.height = qrCanvas.height * scale;
+
+  const borderWidth = 16 * scale;
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.drawImage(qrCanvas, borderWidth, borderWidth, canvas.width - borderWidth * 2, canvas.height - borderWidth * 2);
+
+  if (logo && logo.src && logo.style.display !== "none") {
+    const logoSize = 80 * scale;
+    const borderSize = 10 * scale;
+    const totalSize = logoSize + borderSize * 2;
+    const x = (canvas.width - totalSize) / 2;
+    const y = (canvas.height - totalSize) / 2;
+
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.roundRect(x, y, totalSize, totalSize, 20 * scale);
+    ctx.fill();
+
+    const img = new Image();
+    img.onload = () => {
+      ctx.drawImage(img, x + borderSize, y + borderSize, logoSize, logoSize);
+      const image = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.href = image;
+      link.download = "qrcode_com_logo.png";
+      link.click();
+    };
+    img.src = logo.src;
+  } else {
     const image = canvas.toDataURL("image/png");
     const link = document.createElement("a");
     link.href = image;
-    link.download = "qrcode_com_logo.png";
+    link.download = "qrcode.png";
     link.click();
-  }  
+  }
+}
